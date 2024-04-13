@@ -45,11 +45,6 @@ class LDAP implements LDAPInterface
 
         // Connect to LDAP server using secure connection with certificate and key
         if ($ldap_secure === true) {
-            file_put_contents("php://stderr", "LDAP Host: $ldap_host\n");
-            file_put_contents("php://stderr", "LDAP Port: $ldap_port\n");
-            file_put_contents("php://stderr", "LDAP Cert Path: $ldap_cert_path\n");
-            file_put_contents("php://stderr", "LDAP Key Path: $ldap_key_path\n");
-            file_put_contents("php://stderr", "LDAP Secure: $ldap_secure\n");
             if (!is_string($ldap_cert_path)) {
                 throw new InvalidArgumentException('Fifth argument to LDAP must be the path to the certificate file (string).');
             }
