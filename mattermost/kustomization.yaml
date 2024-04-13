@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: mattermost-operator
+
+helmCharts:
+- name: mattermost-team-edition
+  repo: https://helm.mattermost.com
+  releaseName: mattermost
+  namespace: mattermost-operator
+  version: 6.6.51
+  includeCRDs: true
+  skipTests: true
+  valuesFile: values.yaml
+
+secretGenerator:
+- name: postgres-connection-string
+  namespace: mattermost-operator
+  type: Opaque
+  envs:
+  - "configs/postgres/postgres-connection.env"
+  options:
+    disableNameSuffixHash: true
+
+configMapGenerator:
+- name: mattermost-custom-config
+  namespace: mattermost-operator
+  envs:
+  - "configs/mattermost/configs.env"
+  options:
+    disableNameSuffixHash: true

@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-ldap-client
+  namespace: mattermost-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-ldap-client
+  template:
+    metadata:
+      labels:
+        app: php-ldap-client
+    spec:
+      volumes:
+      - name: shared-files
+        emptyDir: {}
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-config
+      - name: init-scripts
+        configMap:
+          name: init-scripts
+      - name: ldap-server-certificates
+        secret:
+          secretName: ldap-server-certificates
+
+      initContainers:
+      - name: init
+        image: alpine:3.19.1
+        envFrom:
+        - secretRef:
+            name: ldap-secrets
+        - secretRef:
+            name: postgres-root-credentials
+        volumeMounts:
+        - name: init-scripts
+          mountPath: /home/init_ro.sh
+          subPath: init.sh
+        - name: init-scripts
+          mountPath: /home/init_user.sql
+          subPath: init_user.sql
+        - name: init-scripts
+          mountPath: /home/init_schema.sql
+          subPath: init_schema.sql
+        command: ["sh", "-c", "cp /home/init_ro.sh /home/init.sh && chmod +x /home/init.sh && /home/init.sh"]
+
+      containers:
+      - name: php-ldap-client
+        image: mamo-ldap-php-client
+        volumeMounts:
+        - name: shared-files
+          mountPath: /var/www/html
+        - name: ldap-server-certificates
+          mountPath: /etc/ldap/certs/certificate.crt
+          subPath: certificate.crt
+        - name: ldap-server-certificates
+          mountPath: /etc/ldap/certs/private.key
+          subPath: private.key
+        envFrom:
+        - secretRef:
+            name: ldap-secrets
+        env:
+        - name: MATTERMOST_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mattermost-custom-config
+              key: HOST_URL
+
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "mkdir /var/www/html/oauth && cp -r /app/. /var/www/html/oauth"]
+      # Nginx container
+      - name: nginx
+        image: nginx-image
+        volumeMounts:
+        - name: shared-files
+          mountPath: /var/www/html
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+

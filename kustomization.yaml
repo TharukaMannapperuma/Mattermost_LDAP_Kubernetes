@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: mattermost-operator
+
+resources:
+- mattermost
+- php-ldap-client/Kubernetes
+
+configurations:
+- namespace.yaml
+
+images:
+- name: mamo-ldap-php-client
+  newName: mannapperuma/mamo-ldap-php-client
+  newTag: v1.0.0-alpine-fpm-8.3.4
+- name: nginx-image
+  newName: nginx
+  newTag: 1.25.4-bookworm
+

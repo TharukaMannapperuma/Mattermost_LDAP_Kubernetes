@@ -1,0 +1,14 @@
+.vscode
+build
+php-ldap-client/Kubernetes/root_postgres_credentials.env
+php-ldap-client/Kubernetes/certs/certificate.crt
+php-ldap-client/Kubernetes/certs/private.key
+mattermost/charts
+mattermost/configs/postgres/postgres-connection.env
+php-ldap-client/Kubernetes/configs/ldap/ldap_db.env
+php-ldap-client/Kubernetes/configs/ldap/ldap.env
+php-ldap-client/Kubernetes/configs/ldap/oauth.env
+php-ldap-client/Docker/app/certs
+php-ldap-client/Docker/app/authorize.html
+php-ldap-client/Docker/app/authoriza.html
+mattermost/configs/mattermost/configs.env

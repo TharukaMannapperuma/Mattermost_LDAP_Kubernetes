@@ -1,0 +1,58 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+secretGenerator:
+- name: ldap-secrets
+  namespace: mattermost-operator
+  type: Opaque
+  envs:
+  - "configs/ldap/ldap.env"
+  - "configs/ldap/ldap_db.env"
+  - "configs/ldap/oauth.env"
+  options:
+    disableNameSuffixHash: true
+
+- name: postgres-root-credentials
+  namespace: mattermost-operator
+  type: Opaque
+  envs:
+  - "root_postgres_credentials.env"
+  options:
+    disableNameSuffixHash: true
+
+- name: ldap-server-certificates
+  namespace: mattermost-operator
+  type: Opaque
+  files:
+  - certificate.crt=certs/certificate.crt
+  - private.key=certs/private.key
+  options:
+    disableNameSuffixHash: true
+
+configMapGenerator:
+- name: init-scripts
+  namespace: mattermost-operator
+  files:
+  - "init.sh=./initScripts/init.sh"
+  - "init_user.sql=./initScripts/init_user.sql"
+  - "init_schema.sql=./initScripts/init_schema.sql"
+  options:
+    disableNameSuffixHash: true
+
+- name: nginx-config
+  namespace: mattermost-operator
+  files:
+  - "nginx.conf=./configs/nginx.conf"
+  options:
+    disableNameSuffixHash: true
+
+- name: php-ldap-client-configs
+  namespace: mattermost-operator
+  envs:
+  - "configs/general.env"
+  options:
+    disableNameSuffixHash: true
+
+resources:
+- php-ldap-client-deployment.yaml
+- php-ldap-client-service.yaml
