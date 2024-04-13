@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mattermost-ingress
+  namespace: mattermost-operator
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.global-static-ip-name: <static-ip-name-for-mattermost-ingress>
+    kubernetes.io/ingress.allow-http: "true"
+    networking.gke.io/managed-certificates: mattermost-cert
+    networking.gke.io/v1beta1.FrontendConfig: mattermost-frontend-config
+spec:
+  rules:
+  - host: <Mattermost_URL>
+    http:
+      paths:
+      - backend:
+          service:
+            name: mattermost
+            port:
+              number: 8065
+        path: /*
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: php-ldap-client-service
+            port:
+              number: 80
+        path: /oauth/*
+        pathType: ImplementationSpecific

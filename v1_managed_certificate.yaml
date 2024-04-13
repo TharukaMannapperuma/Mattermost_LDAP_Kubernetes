@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: mattermost-cert
+  namespace: mattermost-operator
+spec:
+  domains:
+  - <Mattermost_URL>

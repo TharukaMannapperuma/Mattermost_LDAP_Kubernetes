@@ -1,0 +1,9 @@
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: mattermost-frontend-config
+  namespace: mattermost-operator
+spec:
+  sslPolicy: <your_tls_policy_name>
+  redirectToHttps:
+    enabled: true
