@@ -17,6 +17,7 @@ $prompt_template->loadHTMLFile('form_prompt.html', LIBXML_NOERROR);
 // Modify header_url to redirect to the right page
 $header_url = $prompt_template->getElementById('header_url');
 $footer_company = $prompt_template->getElementById('footer_text');
+$company_logo = $prompt_template->getElementById('company_logo_url');
 
 // Set the href attribute value
 if ($header_url) {
@@ -26,6 +27,11 @@ if ($header_url) {
 // Set the text content of the footer
 if ($footer_company) {
     $footer_company->textContent = $footer_text;
+}
+
+// Set the src attribute value
+if ($company_logo) {
+    $company_logo->setAttribute('src', $company_logo_url);
 }
 
 
