@@ -47,7 +47,7 @@ else if (empty($_POST)) {
     
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="ico" href="./images/favicon.ico">
+        <link rel="icon" type="ico" href="./images/prompt_icon.png">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport" />
         <title>' . $html_page_title . ' | Authorization Page</title>
     
