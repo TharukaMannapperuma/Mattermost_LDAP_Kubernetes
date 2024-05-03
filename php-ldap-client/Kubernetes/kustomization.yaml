@@ -24,7 +24,7 @@ secretGenerator:
   namespace: mattermost-operator
   type: Opaque
   files:
-  - certificate.crt=certs/certificate.crt
+  - certificate.crt=certs/cert.crt
   - private.key=certs/private.key
   options:
     disableNameSuffixHash: true
