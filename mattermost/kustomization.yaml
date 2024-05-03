@@ -5,7 +5,6 @@ helmCharts:
 - name: mattermost-team-edition
   repo: https://helm.mattermost.com
   releaseName: mattermost
-  namespace: mattermost-operator
   version: 6.6.51
   includeCRDs: true
   skipTests: true
@@ -13,7 +12,6 @@ helmCharts:
 
 secretGenerator:
 - name: postgres-connection-string
-  namespace: mattermost-operator
   type: Opaque
   envs:
   - "configs/postgres/postgres-connection.env"
@@ -22,7 +20,6 @@ secretGenerator:
 
 configMapGenerator:
 - name: mattermost-custom-config
-  namespace: mattermost-operator
   envs:
   - "configs/mattermost/configs.env"
   options:
